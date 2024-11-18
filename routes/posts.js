@@ -88,8 +88,16 @@ router
   .route("/:id/comments")
   .get((req,res,next) => {
     const id = req.params.id;
-    const comment = comments.find(c => c.id == id);
-    if(comment) res.json(comment);
+    const userId = req.query.userId;
+    const comment = comments.filter(c => c.id == id);
+    if(comment) 
+      {
+        if(userId) {
+          const user = comment.filter((u => u.userId == userId))
+          return res.json(user);
+        }
+        return res.json(comment);
+      }
     else next() 
   })
 

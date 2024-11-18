@@ -106,8 +106,16 @@ router
   .route("/:id/comments")
   .get((req,res,next) => {
     const id = req.params.id;
-    const comment = comments.find(c => c.id == id);
-    if(comment) res.json(comment);
+    const postId = req.query.postId;
+    const comment = comments.filter(c => c.id == id);
+    if(comment) 
+      {
+        if(postId) {
+          const user = comment.filter((u => u.postId == postId))
+          return res.json(user);
+        }
+        return res.json(comment);
+      }
     else next() 
   })
 module.exports = router;

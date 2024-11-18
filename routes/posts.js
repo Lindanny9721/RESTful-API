@@ -7,6 +7,7 @@ const error = require("../utilities/error");
 router
   .route("/")
   .get((req, res) => {
+    const userId = req.query.userId;
     const links = [
       {
         href: "posts/:id",
@@ -14,8 +15,14 @@ router
         type: "GET",
       },
     ];
-
-    res.json({ posts, links });
+    if(userId)
+    {
+      const post = posts.filter((p => p.userId == userId))
+      res.json({ post, links});
+    }
+    else {
+      res.json({ posts, links });
+    }
   })
   .post((req, res, next) => {
     if (req.body.userId && req.body.title && req.body.content) {

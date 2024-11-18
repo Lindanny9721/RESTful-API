@@ -7,6 +7,7 @@ const error = require("../utilities/error");
 router
     .route("/")
     .get((req,res) => {
+        const userId = req.query.userId;
         const links = [
             {
                 href: "comments/:id",
@@ -14,7 +15,12 @@ router
                 type: "GET",
             },
         ];
-    res.json({comments, links});
+        if(userId)
+        {
+            const comment = comments.filter(c => c.userId == userId )
+            res.json({ comment, links});
+        }
+        else res.json({comment, links});
     })
     .post((req, res, next) => {
         if (req.body.userId && req.body.postId && req.body.comment)
@@ -66,8 +72,8 @@ router
         else next();
     })
     .delete((req, res, next) => {
-        const comment = comments.find((p, i) => {
-            if (p.id == req.params.id) {
+        const comment = comments.find((c, i) => {
+            if (c.id == req.params.id) {
             comments.splice(i, 1);
             return true;
             }

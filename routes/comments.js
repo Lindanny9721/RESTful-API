@@ -8,6 +8,7 @@ router
     .route("/")
     .get((req,res) => {
         const userId = req.query.userId;
+        const postId = req.query.postId;
         const links = [
             {
                 href: "comments/:id",
@@ -18,6 +19,11 @@ router
         if(userId)
         {
             const comment = comments.filter(c => c.userId == userId )
+            res.json({ comment, links});
+        }
+        else if(postId)
+        {
+            const comment = comments.filter(c => c.postId == postId )
             res.json({ comment, links});
         }
         else res.json({comment, links});

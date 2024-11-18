@@ -3,6 +3,7 @@ const router = express.Router();
 
 const users = require("../data/users");
 const posts = require("../data/posts");
+const comments = require("../data/comments");
 const error = require("../utilities/error");
 
 router
@@ -84,8 +85,8 @@ router
 router
   .route("/:id/posts")
   .get((req, res, next) => {
-    const user = req.params.id;
-    const post = posts.find(p => p.id == user);
+    const id = req.params.id;
+    const post = posts.find(p => p.id == id);
     const links = [
       {
         href: `/${req.params.id}/posts`,
@@ -98,7 +99,15 @@ router
         type: "DELETE",
       },
     ];
-    if (user) res.json({ post, links });
+    if (post) res.json({ post, links });
     else next()
+  })
+router
+  .route("/:id/comments")
+  .get((req,res,next) => {
+    const id = req.params.id;
+    const comment = comments.find(c => c.id == id);
+    if(comment) res.json(comment);
+    else next() 
   })
 module.exports = router;

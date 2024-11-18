@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const users = require("../data/users");
+const posts = require("../data/posts");
 const error = require("../utilities/error");
 
 router
@@ -80,5 +81,24 @@ router
     if (user) res.json(user);
     else next();
   });
-
+router
+  .route("/:id/posts")
+  .get((req, res, next) => {
+    const user = req.params.id;
+    const post = posts.find(p => p.id == user);
+    const links = [
+      {
+        href: `/${req.params.id}/posts`,
+        rel: "",
+        type: "PATCH",
+      },
+      {
+        href: `/${req.params.id}/posts`,
+        rel: "",
+        type: "DELETE",
+      },
+    ];
+    if (user) res.json({ post, links });
+    else next()
+  })
 module.exports = router;
